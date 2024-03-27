@@ -49,9 +49,6 @@ const Tateti = () => {
                     ))
                 }
             </section>
-
-            {/* <button onClick={prueba}>hola</button> */}
-
         </main >
 
     )
