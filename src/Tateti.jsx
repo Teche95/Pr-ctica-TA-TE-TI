@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 // TODO: 
 // 1- necesito saber de quien es el turno
@@ -17,23 +17,72 @@ const Tateti = () => {
         O: "o"
     }
 
-    // const celdas = ["x", "o", "x", "o", "x", "o", "x", "o", "x"]
+    // const celdas = ["x", "o", "", "", "", "", "", "", ""]
 
     // este estado sirve para crear un array de 9 posiciones con valores null 
     // tambien voy a ir guardando los valores que el usuario vaya eligiendo para mostrarlo en la pantalla
 
     const [tablero, setTablero] = useState(Array(9).fill(null))
     const [turno, setTurno] = useState(TURNOS.X)
-    // console.log(turno)
 
-    const actualizarTablero = (index) => {
-        // tengo que hacer que el turno ya sea x u o se guarde en el index que selecciono
-        tablero[index] = turno
+    // console.log("tablero", tablero)
 
-        // console.log(tablero)
+    const chequearGanador = (checkwin, index) => {
+        // for (let i = 0; i < 3; i++) {
+
+        // verificacion de filas
+        let ceroAlTres = checkwin.slice(0, 3)
+        let tresAlSeis = checkwin.slice(3, 6)
+        let seisAlOcho = checkwin.slice(6)
+        console.log(ceroAlTres)
+        if (ceroAlTres.every(el => el === turno) || tresAlSeis.every(el => el === turno) || seisAlOcho.every(el => el === turno)) {
+            console.log("gano", turno)
+
+        }
+
+        // verificacion de filas
+        // if (checkwin[i * 3] && checkwin[i * 3] === checkwin[i * 3 + 1] && checkwin[i * 3] === checkwin[i * 3 + 2]) {
+        //     console.log("gano", turno)
+        // }
+
+        // // verificacion de columnas 
+        // if (checkwin[i] && checkwin[i] === checkwin[i + 3] && checkwin[i] === checkwin[i + 6]) {
+        //     console.log("gano", turno)
+        // }
+        let ceroalcuatro = checkwin.slice(0, 3)
+        console.log("ceroalcuatro",ceroalcuatro)
+        if (ceroalcuatro.every(el => el === turno)) {
+            console.log("gano", turno)
+
+        }
+
+
+
+        // // verificacion de diagonales
+        // if (checkwin[0] && checkwin[0] === checkwin[4] && checkwin[0] === checkwin[8]) {
+        //     console.log("ganó", turno)
+        // }
+        // if (checkwin[2] && checkwin[2] === checkwin[4] && checkwin[2] === checkwin[6]) {
+        //     console.log("ganó", turno)
+        // }
+        // }
     }
 
-    // console.log(board)
+    const actualizarTablero = (index) => {
+        // ver si la casilla esta en null o no para saber si tengo que guardar ahí o no 
+        if (!tablero[index]) {
+            const nuevoTablero = [...tablero]
+            // tengo que hacer que el turno ya sea x u o se guarde en el index que selecciono
+            nuevoTablero[index] = turno
+            setTablero(nuevoTablero)
+            setTurno(turno === TURNOS.X ? TURNOS.O : TURNOS.X)
+            console.log(index)
+            chequearGanador(nuevoTablero, index)
+        }
+    }
+
+    // tengo que hacer una funcion que verifique si hay ganador, pero todavia no sé donde colocarla
+
 
     return (
         <main className='board'>
@@ -45,10 +94,13 @@ const Tateti = () => {
                         <div key={index} className='square' onClick={() => actualizarTablero(index)}>
                             {tablero[index]}
                         </div>
-
                     ))
                 }
             </section>
+
+
+
+
         </main >
 
     )
