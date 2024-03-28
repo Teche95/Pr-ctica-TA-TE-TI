@@ -24,60 +24,59 @@ const Tateti = () => {
 
     const [tablero, setTablero] = useState(Array(9).fill(null))
     const [turno, setTurno] = useState(TURNOS.X)
-
+    const [ganador, setGanador] = useState(null)
     // console.log("tablero", tablero)
 
-    const chequearGanador = (checkwin, index) => {
-        // for (let i = 0; i < 3; i++) {
+    const chequearGanador = (checkwin) => {
+        for (let i = 0; i < 3; i++) {
 
-        // verificacion de filas
-        let ceroAlTres = checkwin.slice(0, 3)
-        let tresAlSeis = checkwin.slice(3, 6)
-        let seisAlOcho = checkwin.slice(6)
-        console.log(ceroAlTres)
-        if (ceroAlTres.every(el => el === turno) || tresAlSeis.every(el => el === turno) || seisAlOcho.every(el => el === turno)) {
-            console.log("gano", turno)
+            // verificacion de filas
+            let ceroAlTres = checkwin.slice(0, 3)
+            let tresAlSeis = checkwin.slice(3, 6)
+            let seisAlOcho = checkwin.slice(6)
+            if (ceroAlTres.every(el => el === turno) || tresAlSeis.every(el => el === turno) || seisAlOcho.every(el => el === turno)) {
+                console.log("gano", turno)
+                return ceroAlTres[0]
+            }
 
+            // verificacion de filas
+            // if (checkwin[i * 3] && checkwin[i * 3] === checkwin[i * 3 + 1] && checkwin[i * 3] === checkwin[i * 3 + 2]) {
+            //     console.log("gano", turno)
+            //     return checkwin[i * 3];
+            // }
+
+            // verificacion de columnas 
+            if (checkwin[i] && checkwin[i] === checkwin[i + 3] && checkwin[i] === checkwin[i + 6]) {
+                console.log("gano", turno)
+                return checkwin[i]
+            }
+
+            // verificacion de diagonales
+            if (checkwin[0] && checkwin[0] === checkwin[4] && checkwin[0] === checkwin[8]) {
+                console.log("ganó", turno)
+                return checkwin[0]
+            }
+            if (checkwin[2] && checkwin[2] === checkwin[4] && checkwin[2] === checkwin[6]) {
+                console.log("ganó", turno)
+                return checkwin[2]
+            }
         }
-
-        // verificacion de filas
-        // if (checkwin[i * 3] && checkwin[i * 3] === checkwin[i * 3 + 1] && checkwin[i * 3] === checkwin[i * 3 + 2]) {
-        //     console.log("gano", turno)
-        // }
-
-        // // verificacion de columnas 
-        // if (checkwin[i] && checkwin[i] === checkwin[i + 3] && checkwin[i] === checkwin[i + 6]) {
-        //     console.log("gano", turno)
-        // }
-        let ceroalcuatro = checkwin.slice(0, 3)
-        console.log("ceroalcuatro",ceroalcuatro)
-        if (ceroalcuatro.every(el => el === turno)) {
-            console.log("gano", turno)
-
-        }
-
-
-
-        // // verificacion de diagonales
-        // if (checkwin[0] && checkwin[0] === checkwin[4] && checkwin[0] === checkwin[8]) {
-        //     console.log("ganó", turno)
-        // }
-        // if (checkwin[2] && checkwin[2] === checkwin[4] && checkwin[2] === checkwin[6]) {
-        //     console.log("ganó", turno)
-        // }
-        // }
+        return null
     }
 
     const actualizarTablero = (index) => {
         // ver si la casilla esta en null o no para saber si tengo que guardar ahí o no 
-        if (!tablero[index]) {
+        if (!tablero[index] && !ganador) {
             const nuevoTablero = [...tablero]
             // tengo que hacer que el turno ya sea x u o se guarde en el index que selecciono
             nuevoTablero[index] = turno
             setTablero(nuevoTablero)
             setTurno(turno === TURNOS.X ? TURNOS.O : TURNOS.X)
             console.log(index)
-            chequearGanador(nuevoTablero, index)
+            const nuevoGanador = chequearGanador(nuevoTablero)
+            if (nuevoGanador) {
+                setGanador(nuevoGanador)
+            }
         }
     }
 
